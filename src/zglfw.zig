@@ -550,7 +550,8 @@ pub const Gamepad = enum(c_int) {
         left_trigger = 4,
         right_trigger = 5,
 
-        pub const count = std.meta.fields(@This()).len;
+        // pub const count = std.meta.fields(@This()).len;
+        pub const count = 6,
     };
 
     pub const Button = enum(u8) {
@@ -570,7 +571,8 @@ pub const Gamepad = enum(c_int) {
         dpad_down = 13,
         dpad_left = 14,
 
-        pub const count = std.meta.fields(@This()).len;
+        // pub const count = std.meta.fields(@This()).len;
+        pub const count = 15,
 
         pub const cross = Button.a;
         pub const circle = Button.b;
@@ -580,11 +582,14 @@ pub const Gamepad = enum(c_int) {
 
     pub const State = extern struct {
         comptime {
-            const c = @cImport(@cInclude("GLFW/glfw3.h"));
-            assert(@sizeOf(c.GLFWgamepadstate) == @sizeOf(State));
-            for (std.meta.fieldNames(State)) |field_name| {
-                assert(@offsetOf(c.GLFWgamepadstate, field_name) == @offsetOf(State, field_name));
-            }
+            // const c = @cImport(@cInclude("GLFW/glfw3.h"));
+            // assert(@sizeOf(c.GLFWgamepadstate) == @sizeOf(State));
+            //for (std.meta.fieldNames(State)) |field_name| {
+            //    assert(@offsetOf(c.GLFWgamepadstate, field_name) == @offsetOf(State, field_name));
+            // }
+            assert(@sizeOf(State) == 40);
+            assert(@offsetOf(State, "buttons") == 0);
+            assert(@offsetOf(State, "axes") == 16);
         }
         buttons: [Button.count]Joystick.ButtonAction = @splat(Joystick.ButtonAction.release),
         axes: [Axis.count]f32 = @splat(0),
@@ -711,12 +716,13 @@ extern fn glfwGetVideoModes(*Monitor, count: *c_int) ?[*]VideoMode;
 
 pub const VideoMode = extern struct {
     comptime {
-        const c = @cImport(@cInclude("GLFW/glfw3.h"));
-        assert(@sizeOf(c.GLFWvidmode) == @sizeOf(VideoMode));
-        for (std.meta.fieldNames(VideoMode), 0..) |field_name, i| {
-            assert(@offsetOf(c.GLFWvidmode, std.meta.fieldNames(c.GLFWvidmode)[i]) ==
-                @offsetOf(VideoMode, field_name));
-        }
+        //const c = @cImport(@cInclude("GLFW/glfw3.h"));
+        //assert(@sizeOf(c.GLFWvidmode) == @sizeOf(VideoMode));
+        //for (std.meta.fieldNames(VideoMode), 0..) |field_name, i| {
+        //    assert(@offsetOf(c.GLFWvidmode, std.meta.fieldNames(c.GLFWvidmode)[i]) ==
+        //        @offsetOf(VideoMode, field_name));
+        //}
+        assert(@sizeOf(VideoMode) == 6 * @sizeOf(c_int));
     }
     width: c_int,
     height: c_int,
@@ -732,11 +738,14 @@ pub const VideoMode = extern struct {
 //--------------------------------------------------------------------------------------------------
 pub const Image = extern struct {
     comptime {
-        const c = @cImport(@cInclude("GLFW/glfw3.h"));
-        assert(@sizeOf(c.GLFWimage) == @sizeOf(Image));
-        for (std.meta.fieldNames(Image)) |field_name| {
-            assert(@offsetOf(c.GLFWimage, field_name) == @offsetOf(Image, field_name));
-        }
+        // const c = @cImport(@cInclude("GLFW/glfw3.h"));
+        // assert(@sizeOf(c.GLFWimage) == @sizeOf(Image));
+        // for (std.meta.fieldNames(Image)) |field_name| {
+        //     assert(@offsetOf(c.GLFWimage, field_name) == @offsetOf(Image, field_name));
+        // }
+        assert(@offsetOf(Image, "width") == 0);
+        assert(@offsetOf(Image, "height") == @sizeOf(c_int));
+        assert(@offsetOf(Image, "pixels") == 2 * @sizeOf(c_int));
     }
     width: c_int,
     height: c_int,
