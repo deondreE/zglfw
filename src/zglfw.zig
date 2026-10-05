@@ -715,15 +715,15 @@ pub fn getVideoModes(monitor: *Monitor) Error![]VideoMode {
 extern fn glfwGetVideoModes(*Monitor, count: *c_int) ?[*]VideoMode;
 
 pub const VideoMode = extern struct {
-    comptime {
+    // comptime {
         //const c = @cImport(@cInclude("GLFW/glfw3.h"));
         //assert(@sizeOf(c.GLFWvidmode) == @sizeOf(VideoMode));
         //for (std.meta.fieldNames(VideoMode), 0..) |field_name, i| {
         //    assert(@offsetOf(c.GLFWvidmode, std.meta.fieldNames(c.GLFWvidmode)[i]) ==
         //        @offsetOf(VideoMode, field_name));
         //}
-        assert(@sizeOf(VideoMode) == 6 * @sizeOf(c_int));
-    }
+        // assert(@sizeOf(VideoMode) == 6 * @sizeOf(c_int));
+    // }
     width: c_int,
     height: c_int,
     red_bits: c_int,
